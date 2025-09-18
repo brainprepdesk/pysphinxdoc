@@ -393,6 +393,7 @@ sphinx_gallery_conf = {{
 
 mermaid_version = "11.4.0"
 
+
 def touch_example_backreferences(
     app,
     what,  # noqa: ARG001

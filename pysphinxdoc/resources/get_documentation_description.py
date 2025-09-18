@@ -19,6 +19,7 @@ Using either the default description or the one available in the project.
 
 import os
 from pathlib import Path
+
 from jinja2 import Template
 
 doc_dir = Path(__file__).parent
@@ -37,7 +38,7 @@ output_files = [
 def main() -> None:
     """ Generate '.rst' files from templates.
     """
-    for tplfile, outfile in zip(template_files, output_files):
+    for tplfile, outfile in zip(template_files, output_files, strict=True):
         inject_with_jinja(tplfile, outfile, context=[])
 
 

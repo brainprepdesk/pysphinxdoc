@@ -7,7 +7,7 @@
 #
 #   $ ruff check pysphinxdoc
 ###
-name: "PythonLinter[RUFF]"
+name: "PythonLinter[ruff]"
 
 on:
   push:

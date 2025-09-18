@@ -16,11 +16,11 @@ Check for the following files (optional):
 - highlights.csv
 """
 
-import os
 import csv
+import os
 from pathlib import Path
-from jinja2 import Template
 
+from jinja2 import Template
 
 doc_dir = Path(__file__).parent
 template_file = doc_dir / "index.jinja"

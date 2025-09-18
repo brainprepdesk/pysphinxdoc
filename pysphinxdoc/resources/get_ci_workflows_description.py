@@ -16,6 +16,7 @@ to generate a .rst page for the documentation.
 """
 
 from pathlib import Path
+
 from jinja2 import Template
 
 doc_dir = Path(__file__).parent

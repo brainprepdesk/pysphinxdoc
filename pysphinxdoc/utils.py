@@ -9,14 +9,12 @@
 """ Provide usefull functions.
 """
 
-import os
-import re
 import inspect
 
 
 def getmembers(module, root_module=None):
     """ Return the members of a module, and try to apply the selection
-    defined in the '__all__' attribute.    
+    defined in the '__all__' attribute.
 
     Parameters
     ----------

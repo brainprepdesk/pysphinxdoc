@@ -7,7 +7,7 @@
 #
 #   $ pycodestyle pysphinxdoc --ignore="E121,E123,E126,E226,E24,E704,E402,E731,E722,E741,W503,W504,W605,E305"
 ###
-name: "PythonLinter[PEP8]"
+name: "PythonLinter[pycodestyle]"
 
 on:
   push:

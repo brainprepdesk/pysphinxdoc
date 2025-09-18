@@ -10,25 +10,20 @@
 documentation of a module.
 """
 
-import os
 import glob
-import sys
-import re
-import shutil
-import warnings
-import textwrap
-import collections
-from pprint import pprint
-from docutils.core import publish_parts
 import importlib
-import datetime
-import inspect
+import os
+import shutil
+import sys
+import textwrap
+from pprint import pprint
+
 from distutils.dir_util import copy_tree
 
 from .utils import getmembers
 
 
-class DocWriter(object):
+class DocWriter:
     """ A basic class to create a Sphinx complient documentation of a module.
 
     Parameters
@@ -72,7 +67,7 @@ class DocWriter(object):
         if not os.path.isdir(self.guidedir):
             self.guidedir = None
         if os.path.isdir(self.apidir):
-            raise IOError(
+            raise OSError(
                 f"'{self.apidir}' already created, can't delete it "
                 "automatically. Use the Makefile to generate the "
                 "documentation using the 'make html', 'make html-strict', "
@@ -118,7 +113,7 @@ class DocWriter(object):
                 self.module.__doc__ or ""
             )
         }
-        for path in default_files + [conf_file, index_file]:
+        for path in [*default_files, conf_file, index_file]:
             self.write_from_template(path, info, verbose=self.verbose)
 
     def write_api_search(self):
@@ -132,7 +127,7 @@ class DocWriter(object):
         search_file = os.path.join(self.apidir, "search.rst")
         shutil.copy(template_file, search_file)
         entries = []
-        for _, members in self.module_members.items():
+        for members in self.module_members.values():
             entries.extend(members["classes"] + members["functions"])
         entries = [
             f"<li><a href='{name}.html'>{name}</a></li>"
@@ -245,7 +240,7 @@ class DocWriter(object):
             pprint(template_info)
         with open(template_file) as of:
             buff = of.read()
-        with open(template_file, "wt") as of:
+        with open(template_file, "w") as of:
             of.write(buff.format(**template_info))
 
     @classmethod

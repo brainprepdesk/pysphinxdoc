@@ -15,8 +15,8 @@ Generate the following files:
 
 import os
 from pathlib import Path
-from jinja2 import Template
 
+from jinja2 import Template
 
 doc_dir = Path(__file__).parent
 template_file = doc_dir / "versions.jinja"
@@ -32,7 +32,7 @@ def main() -> None:
         doc_url = f"https://{doc_url}"
     else:
         raise AttributeError(
-            f"Yet, works only with GitHub repository: {{repo_url}}."
+            f"Yet, works only with GitHub repository: {repo_url}."
         )
     release_urls = [
         f"{doc_url}/dev",
@@ -40,7 +40,7 @@ def main() -> None:
     ]
     release_urls += [
         f"{doc_url}/{tag.strip().replace('v', '')}"
-        for tag in  os.popen("git tag").readlines()
+        for tag in os.popen("git tag").readlines()
     ]
     context = []
     for url in release_urls:
