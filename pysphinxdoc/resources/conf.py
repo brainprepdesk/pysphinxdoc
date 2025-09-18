@@ -1,120 +1,151 @@
-#! /usr/bin/env python
-##########################################################################
-# pysphinxdoc - Copyright (C) AGrigis, 2016
-# Distributed under the terms of the CeCILL-B license, as published by
-# the CEA-CNRS-INRIA. Refer to the LICENSE file or to
-# http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html
-# for details.
-##########################################################################
+""" {project} documentation build configuration file.
+"""
 
-# System import
-import sys
 import os
-from distutils.version import LooseVersion
-import sphinx
+import re
+import sys
+from pathlib import Path
 
-if LooseVersion(sphinx.__version__) < LooseVersion("1"):
-    raise RuntimeError("Need sphinx >= 1 for autodoc to work correctly.")
-if LooseVersion(sphinx.__version__) < LooseVersion("1.8"):
-    sphinx_math = "sphinx.ext.pngmath"
-else:
-    sphinx_math = "sphinx.ext.imgmath"
 
-# -- General configuration --------------------------------------------------
+# ----------------------------------------------------------------------------
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here.
-sys.path.insert(0, os.path.join("%(PYSPHINXDOCDIR)s", "sphinxext"))
+# If extensions (or modules to document with autodoc) are in another
+# directory, add these directories to sys.path here. If the directory
+# is relative to the documentation root, use os.path.abspath to make it
+# absolute, like shown here.
+sys.path.insert(0, str(Path("sphinxext").absolute()))
 
-# Add any Sphinx extension module names here, as strings.
-# They can be extensions
-# coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
+# We also add the directory just above to enable local imports
+sys.path.insert(0, str(Path("..").absolute()))
+
+try:
+    from {project} import __version__
+except:
+    __version__ == "undefined"
+
+
+# -- General configuration ---------------------------------------------------
+
+# Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
+    "myst_parser",
+    "numpydoc",
+    "sphinx_copybutton",
+    "sphinx_design",
+    "sphinx_gallery.gen_gallery",
     "sphinx.ext.autodoc",
-    "sphinx.ext.doctest",
-    "sphinx.ext.intersphinx",
-    "sphinx.ext.todo",
-    "sphinx.ext.coverage",
-    sphinx_math,
-    "sphinx.ext.ifconfig",
     "sphinx.ext.autosummary",
-    "sphinx.ext.viewcode",
-    "numpy_ext.numpydoc",
-    "custom_ext.hidden_code_block",
-    "custom_ext.hidden_technical_block",
-    "custom_ext.link_to_block",
-    "sphinx_gallery.gen_gallery"]
+    "sphinx.ext.extlinks",
+    "sphinx.ext.imgmath",
+    "sphinx.ext.intersphinx",
+    "sphinxcontrib.bibtex",
+    "sphinxcontrib.mermaid",
+    "sphinxext.opengraph",
+    "sphinx.ext.viewcode"
+]
 
-# Configure gallery
-sphinx_gallery_conf = {
-    "doc_module": "%(MODULE)s",
-    "backreferences_dir": os.path.join("generated", "gallery"),
-    "examples_dirs": os.path.join(os.pardir, "examples"),
-    "gallery_dirs": "auto_gallery",
-    "show_memory": True,
-    "reference_url": {"%(MODULE)s": None}}
+autosummary_generate = True
 
-# Remove some numpy-linked warnings
+autodoc_typehints = "none"
+
+autodoc_default_options = {{
+    "imported-members": False,
+    "inherited-members": False,
+    "undoc-members": True,
+    "member-order": "bysource",
+}}
+
+# Get rid of spurious warnings due to some interaction between
+# autosummary and numpydoc. See
+# https://github.com/phn/pytpm/issues/3#issuecomment-12133978 for more
+# details
 numpydoc_show_class_members = False
 
-# generate autosummary even if no references
-autosummary_generate = True
-autoclass_content = "both"
-
 # Add any paths that contain templates here, relative to this directory.
-templates_path = [
-    os.path.join("%(PYSPHINXDOCDIR)s", "templates"),
-    os.path.join("generated", "_templates")]
+templates_path = ["templates"]
+
+# Generate autosummary even if no references
+autosummary_generate = True
 
 # The suffix of source filenames.
-source_suffix = ".rst"
+source_suffix = {{".rst": "restructuredtext", ".md": "markdown"}}
 
 # The encoding of source files.
 # source_encoding = 'utf-8'
 
+# Generate the plots for the gallery
+plot_gallery = "True"
+
 # The master toctree document.
 master_doc = "index"
 
-# General information about the project.
-project = u"%(MODULE)s"
-copyright = u"""%(YEAR)s, %(AUTHOR)s <%(AUTHOR_EMAIL)s>"""
+# Sphinxcontrib-bibtex
+bibtex_bibfiles = [
+    "../references.bib"
+]
+bibtex_style = "unsrt"
+bibtex_reference_style = "author_year"
+bibtex_footbibliography_header = ""
 
-# The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = "%(VERSION)s"
-# The full version, including alpha/beta/rc tags.
-release = version
+# General information about the project.
+project = "{project}"
+copyright = "The {project} developers."
+
+# Latest release version
+try:
+    latest_release = re.match(
+        r"v?([0-9]+.[0-9]+.[0-9]+).*",
+        os.popen("git describe --tags").read().strip(),
+    ).groups()[0]
+except AttributeError:
+    # This may fail in case the git tags were not fetched.
+    # So let's have a back up.
+    latest_release = f"{{__version__}}.dev"
+
+
+# URL
+repo_url = os.popen("git remote -v").read().strip()
+repo_url = repo_url.split("\t")[-1].split(" ")[0].replace(".git", "")
+split = repo_url.split("/")
+if split[2] == "github.com":
+    doc_url = "/".join([split[0], f"{{split[2]}}.github.io", split[3]])
+else:
+    raise AttributeError(
+        f"Yet, works only with GitHub repository: {{repo_url}}."
+    )
+
+# The full current version, including alpha/beta/rc tags.
+current_version = __version__
 
 # The language for content autogenerated by Sphinx. Refer to documentation
 # for a list of supported languages.
-# language = None
+language = "en"
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
 # today = ''
 # Else, today_fmt is used as the format for a strftime call.
-# today_fmt = ''
+# today_fmt = '%B %d, %Y'
 
 # List of documents that shouldn't be included in the build.
 # unused_docs = []
-
-# List of directories, relative to source directory, that shouldn't be searched
-# for source files.
 exclude_patterns = [
-    "examples",
-    templates_path[0],
-    templates_path[1],
-    os.path.join("scikit-learn", "static", "ML_MAPS_README.rst")]
+    "tune_toc.rst",
+    "includes/big_toc_css.rst",
+    "includes/bigger_toc_css.rst",
+]
+
+# List of directories, relative to source directory, that shouldn't be
+# searched for source files.
+exclude_trees = ["_build", "templates", "includes"]
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
 # default_role = None
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
-add_function_parentheses = True
+add_function_parentheses = False
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
@@ -125,72 +156,151 @@ add_function_parentheses = True
 # show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = "sphinx"
+# https://pygments.org/styles/
+pygments_style = "sas"
+pygments_dark_style = "monokai"
 
 # A list of ignored prefixes for module index sorting.
 # modindex_common_prefix = []
 
+# A list of warning types to suppress arbitrary warning messages
+suppress_warnings = ["image.not_readable", "config.cache"]
 
-# -- Options for HTML output ------------------------------------------------
+linkcheck_allowed_redirects = {{
+    # Issue redirect to PR
+    f"{{repo_url}}/issues/.*": f"{{repo_url}}/pull/.*",
+    # doi redirect
+    "https://doi.org/": r"https://.*",
+}}
+
+linkcheck_ignore = [
+    # ignore {project} github issues mostly for the sake of speed
+    # given that there many of those in our changelog
+    f"{{repo_url}}/issues/.*",
+    # those are needed because figures cannot take sphinx gallery reference
+    # as target
+    r"../auto_examples/.*html",
+    r"auto_examples/.*html",
+    # give a 403 Client Error: Forbidden for url:
+    r"https://sites.wustl.edu/oasisbrains/.*",
+    # similarly below are publishers that do not like doi redirects:
+    r"https://doi.org/.*"
+]
+
+linkcheck_exclude_documents = [r".*/sg_execution_times.rst"]
+
+linkcheck_allow_unauthorized = True
+
+linkcheck_report_timeouts_as_broken = False
+
+# double default rate_limit_timeout
+linkcheck_rate_limit_timeout = 600.0
 
 
-# The name of the Pygments (syntax highlighting) style to use.
-pygments_style = "sphinx"
+# -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
-html_theme = "azmind"
+html_theme = "furo"
+
+# Add custom css instructions from themes/custom.css
+font_awesome = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/"
+html_css_files = [
+    "custom.css",
+    f"{{font_awesome}}all.min.css",
+    f"{{font_awesome}}fontawesome.min.css",
+    f"{{font_awesome}}solid.min.css",
+    f"{{font_awesome}}brands.min.css",
+]
+
+# Add custom js instructions from themes/custom.js
+html_js_files = [
+    "custom.js",
+]
+
+# The style sheet to use for HTML and HTML Help pages. A file of that name
+# must exist either in Sphinx' static/ path, or in one of the custom paths
+# given in html_static_path.
+# html_style = 'nature.css'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {
-    "oldversion": False,
-    "collapsiblesidebar": True,
-    "google_analytics": True,
-    "surveybanner": False,
-    "sprintbanner": True}
+html_theme_options = {{
+    "dark_css_variables": {{
+        "color-announcement-background": "#935610",
+        "color-announcement-text": "#FFFFFF",
+    }},
+    "light_css_variables": {{
+        "admonition-font-size": "100%",
+        "admonition-title-font-size": "100%",
+        "color-announcement-background": "#FBB360",
+        "color-announcement-text": "#111418",
+        "color-admonition-title--note": "#448aff",
+        "color-admonition-title-background--note": "#448aff10",
+    }},
+    "source_repository": repo_url,
+    "source_branch": "main",
+    "source_directory": "doc/",
+    "footer_icons": [
+        {{
+            "name": "GitHub",
+            "url": repo_url,
+            "html": "",
+            "class": "fa-brands fa-solid fa-github fa-2x",
+        }},
+    ],
+}}
+
+# Add banner in case version is not stable
+if "dev" in current_version:
+    html_theme_options["announcement"] = (
+        "<p>This is the development documentation "
+        f"of {project} ({{current_version}}) "
+        '<a class="sd-sphinx-override sd-badge sd-text-wrap '
+        'sd-btn-outline-dark reference external" '
+        f'href="{{doc_url}}/stable">'
+        f"<span>Switch to stable version ({{latest_release}})</span></a></p>"
+    )
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = [
-    os.path.join("%(PYSPHINXDOCDIR)s", "themes")]
+# html_theme_path = ['themes']
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "%(NAME)s"
+html_title = f"{project} {{current_version}} documentation"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = "%(NAME)s"
+html_short_title = "{project}"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-# html_logo = ""
+html_logo = "logos/{project}-transparent.png"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-# html_favicon = None
+html_favicon = "logos/favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = [
-    os.path.join("%(SRCDIR)s", "_static")]
+html_static_path = ["images", "themes"]
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
-# html_last_updated_fmt = ''
+# html_last_updated_fmt = '%b %d, %Y'
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
 # html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-# html_sidebars = {}
+# html_sidebars = {{}}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
-# html_additional_pages = {}
+# html_additional_pages = {{}}
 
 # If false, no module index is generated.
 html_use_modindex = False
@@ -209,51 +319,104 @@ html_show_sourcelink = False
 # base URL from which the finished HTML is served.
 # html_use_opensearch = ''
 
+# variables to pass to HTML templating engine
+build_dev_html = bool(int(os.environ.get("BUILD_DEV_HTML", False)))
+
+html_context = {{"build_dev_html": build_dev_html}}
+
 # If nonempty, this is the file name suffix for HTML files (e.g. ".xhtml").
 # html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "%(NAME)s"
+htmlhelp_basename = "PythonScientic"
 
+# Sphinx copybutton config
+copybutton_prompt_text = ">>> "
 
-# -- Options for LaTeX output -----------------------------------------------
-
-# The paper size ('letter' or 'a4').
-# latex_paper_size = 'letter'
-
-# The font size ('10pt', '11pt' or '12pt').
-# latex_font_size = '10pt'
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title, author, documentclass
-# [howto/manual]).
-latex_documents = [
-    ("index", "%(MODULE)s.tex", "%(MODULE)s Documentation", """%(AUTHOR)s""",
-     "manual"),
-]
-
-# The name of an image file (relative to this directory) to place at the top of
-# the title page.
-# latex_logo = None
-
-# For "manual" documents, if this is true, then toplevel headings are parts,
-# not chapters.
-# latex_use_parts = False
-
-# Additional stuff for the LaTeX preamble.
-# latex_preamble = ''
-
-# Documents to append as an appendix to all manuals.
-# latex_appendices = []
-
-# If false, no module index is generated.
-# latex_use_modindex = True
-
+trim_doctests_flags = True
 
 # Example configuration for intersphinx: refer to the Python standard library.
-# intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping = {{
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "scipy": ("https://scipy.github.io/devdocs/", None),
+    "matplotlib": ("https://matplotlib.org/stable/", None),
+    "PIL": ("https://pillow.readthedocs.io/en/stable/", None),
+    "sklearn": ("https://scikit-learn.org/stable/", None),
+    "nibabel": ("https://nipy.org/nibabel/", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
+    "torch": ("https://pytorch.org/docs/main/", None),
+    "torchvision": ("https://pytorch.org/vision/main/", None),
+    "torchmetrics": ("https://lightning.ai/docs/torchmetrics/stable/", None),
+    "lighnting": ("https://lightning.ai/docs/pytorch/stable/", None),
+    "lightning.fabric": ("https://lightning.ai/docs/fabric/stable/", None),
+}}
+nitpicky = True
+nitpick_ignore = [
+    ("py:class", "Module"),
+    ("py:class", "pytorch_lightning.core.LightningModule"),
+    ("py:class", "pytorch_lightning.core.module.LightningModule"),
+    ("py:class", "pytorch_lightning.callbacks.callback.Callback"),
+]
+
+extlinks = {{
+    "sklearn": ("https://scikit-learn.org/stable/%s", None),
+    "{project}-gh": (f"{{repo_url}}/%s", None),
+    "neurostars": ("https://neurostars.org/tag/nilearn/%s", None),
+    "nipy": ("https://nipy.org/%s", None),
+}}
+
+binder_branch = "main"
+sphinx_gallery_conf = {{
+    "doc_module": "{project}",
+    "backreferences_dir": Path("modules", "generated"),
+    "reference_url": {{"{project}": None}},
+    "junit": "../test-results/sphinx-gallery/junit.xml",
+    "examples_dirs": "../examples/",
+    "gallery_dirs": "auto_examples",
+    # Ignore the function signature leftover by joblib
+    "ignore_pattern": r"func_code\.py",
+    "show_memory": not sys.platform.startswith("win"),
+    "remove_config_comments": True,
+    "nested_sections": True,
+    # "binder": {{
+    #     "org": "{project}",
+    #     "repo": "{project}",
+    #     "binderhub_url": "https://mybinder.org",
+    #     "branch": binder_branch,
+    #     "dependencies": "./binder/requirements.txt",
+    #     "use_jupyter_lab": True,
+    # }},
+    "default_thumb_file": "logos/{project}-desaturate-100.png",
+    "within_subsection_order": "ExampleTitleSortKey",
+}}
+
+mermaid_version = "11.4.0"
+
+def touch_example_backreferences(
+    app,
+    what,  # noqa: ARG001
+    name,
+    obj,  # noqa: ARG001
+    options,  # noqa: ARG001
+    lines,  # noqa: ARG001
+):
+    # generate empty examples files, so that we don't get
+    # inclusion errors if there are no examples for a class / module
+    examples_path = Path(
+        app.srcdir, "modules", "generated", f"{{name}}.examples"
+    )
+    if not examples_path.exists():
+        examples_path.touch()
 
 
-# -- Options for Texinfo output ---------------------------------------------
+def setup(app):
+    app.connect("autodoc-process-docstring", touch_example_backreferences)
 
-autodoc_default_flags = ["members", "undoc-members"]
+
+# -- sphinxext.opengraph configuration -------------------------------------
+
+ogp_site_url = doc_url
+ogp_image = f"{{doc_url}}/_static/{project}-logo.png"
+ogp_use_first_image = True
+ogp_site_name = "{project}"

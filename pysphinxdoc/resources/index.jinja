@@ -1,0 +1,94 @@
+{project_title}
+
+
+{description}
+
+
+.. grid::
+
+    .. grid-item-card:: :fas:`rocket` Quickstart
+        :link: quickstart
+        :link-type: ref
+        :columns: 12 12 4 4
+        :class-card: sd-shadow-md
+        :class-title: sd-text-primary
+        :margin: 2 2 0 0
+
+        Get started with {project}
+
+    .. grid-item-card:: :fas:`th` Examples
+        :link: auto_examples/index.html
+        :link-type: url
+        :columns: 12 12 4 4
+        :class-card: sd-shadow-md
+        :class-title: sd-text-primary
+        :margin: 2 2 0 0
+
+        Discover functionalities by reading examples
+
+    .. grid-item-card:: :fas:`book` User guide
+        :link: user_guide
+        :link-type: ref
+        :columns: 12 12 4 4
+        :class-card: sd-shadow-md
+        :class-title: sd-text-primary
+        :margin: 2 2 0 0
+
+        Learn about {project}
+
+
+Featured works
+--------------
+
+.. raw:: html
+
+    <br/>
+    <div class="sphx-glr-thumbnails">
+
+{{% for highlight in context %}}
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="{{{{highlight.tooltip}}}}">
+
+.. only:: html
+
+  .. image:: {{{{highlight.thumb}}}}
+    :alt: {{{{highlight.title}}}}
+
+  :ref:`{{{{highlight.ref}}}}`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">{{{{highlight.title}}}}</div>
+    </div>
+
+{{% endfor %}}
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+   :includehidden:
+   :titlesonly:
+
+   quickstart.md
+   auto_examples/index.rst
+   {user_guide}
+   modules/index.rst
+   modules/search.rst
+
+.. toctree::
+   :hidden:
+   :caption: Development
+
+   contributing.rst
+   ci.rst
+   maintenance.rst
+   whats_new.rst
+   authors.rst
+   license.rst
+   versions.rst

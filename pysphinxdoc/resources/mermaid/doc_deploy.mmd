@@ -1,0 +1,18 @@
+flowchart TD
+
+subgraph GitHub IO
+doc_dev["<code>/dev"]
+doc_stable["<code>/main"]
+doc_x.x.x["<code>/x.x.x"]
+end
+
+subgraph GitHub
+DocumentationBuilder["documentation.yml"]
+artifacts@{ shape: docs, label: "doc build artifacts" }
+end
+
+DocumentationBuilder -- on main --> doc_stable
+DocumentationBuilder -- on dev --> doc_dev
+DocumentationBuilder -- on GitHub release ---> doc_x.x.x
+DocumentationBuilder -- on PR --> artifacts
+

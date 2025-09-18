@@ -1,111 +1,134 @@
-name: "DOCUMENTATION"
+# Workflow to build doc, upload it as artifact, and deploy it for the
+# master, main and dev branches.
+#
+# To run this check locally from the `doc` folder:
+#
+# .. code-block:: bash
+#
+#   $ sphinxdoc -v 2 -p $MODULE_DIR -n $MODULE_NAME -o $MODULE_DIR/doc
+#   $ cd $MODULE_DIR/doc
+#   $ make html-strict
+###
+name: "DocumentationBuilder"
 
 on:
   push:
     branches:
       - "master"
+      - "main"
+      - "dev"
   pull_request:
     branches:
       - "*"
+  workflow_dispatch:
+
+env:
+    MIN_PYTHON_VERSION: "3.12"
 
 jobs:
 
   build_and_deploy:
 
-    runs-on: ${{ matrix.os }}
-    if: ${{ github.ref == 'refs/heads/master' }}
+    runs-on: "ubuntu-latest"
+    if: ${{ github.ref == 'refs/heads/master' ||
+            github.ref == 'refs/heads/main' ||
+            github.ref == 'refs/heads/dev' }}
     strategy:
       fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
 
     permissions:
       contents: write
 
     steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+    - name: Set up Python
+      uses: actions/setup-python@v6
       with:
-        python-version: ${{ matrix.python-version }}
-    #- name: Install Latex
-    #  run: |
-    #    sudo apt install texlive-latex-extra
-    #    sudo apt install dvipng
-    - name: Install dependencies
+        python-version: ${{ env.MIN_PYTHON_VERSION }}
+        cache: "pip"
+    - name: Install apt packages
+      run: |
+        sudo -E apt-get -yq update
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install \
+            dvipng texlive-latex-base texlive-latex-extra
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install git+https://github.com/AGrigis/pysphinxdoc.git
         pip install --progress-bar off .
-   #     pip install -r doc/requirements.txt
     - name: Compute documentation
       run: |
-        mkdir -p tmp/doc
         DIR=$(pwd)
-        sphinxdoc -v 2 -p . -n pysphinxdoc -o $DIR/tmp/doc
-        cd tmp/doc
-        make raw-html
-        ls source/_static
-        ls build/html/_static
-        cp -r source/_static/* build/html/_static
-        cd ../..
+        sphinxdoc -v 2 -p $DIR -n pysphinxdoc -o $DIR/doc
+        cd $DIR/doc
+        make html-strict
+        cd $DIR
     - name: Upload documentation as an artifact
       uses: actions/upload-artifact@v4
       with: 
         name: html-documentation
-        retention-days: 15
+        retention-days: 1
         path: |
-            tmp/doc/build/html
+            doc/build/html
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: tmp/doc/build/html
+        publish_dir: doc/build/html
+        destination_dir: ${{ steps.extract_branch.outputs.branch }}
 
   build:
 
-    runs-on: ${{ matrix.os }}
-    if: ${{ github.ref != 'refs/heads/master' }}
+    runs-on: "ubuntu-latest"
+    if: ${{ github.ref != 'refs/heads/master' &&
+            github.ref != 'refs/heads/main' &&
+            github.ref != 'refs/heads/dev'}}
     strategy:
       fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.12]
 
     permissions:
       contents: write
 
     steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+    - name: Set up Python
+      uses: actions/setup-python@v6
       with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Latex
+        python-version: ${{ env.MIN_PYTHON_VERSION }}
+        cache: "pip"
+    - name: Install apt packages
       run: |
-        sudo apt install texlive-latex-extra
-        sudo apt install dvipng
-    - name: Install dependencies
+        sudo -E apt-get -yq update
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install \
+            dvipng texlive-latex-base texlive-latex-extra
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install git+https://github.com/AGrigis/pysphinxdoc.git
         pip install --progress-bar off .
-    #    pip install -r doc/requirements.txt
     - name: Compute documentation
       run: |
-        mkdir -p tmp/doc
         DIR=$(pwd)
-        sphinxdoc -v 2 -p . -n pysphinxdoc -o $DIR/tmp/doc
-        cd tmp/doc
-        make raw-html
-        ls source/_static
-        ls build/html/_static
-        cp -r source/_static/* build/html/_static
-        cd ../..
+        sphinxdoc -v 2 -p $DIR -n pysphinxdoc -o $DIR/doc
+        cd $DIR/doc
+        make html-strict
+        cd $DIR
+    - name: Upload documentation as an artifact
+      uses: actions/upload-artifact@v4
+      with: 
+        name: html-documentation
+        retention-days: 1
+        path: |
+            doc/build/html

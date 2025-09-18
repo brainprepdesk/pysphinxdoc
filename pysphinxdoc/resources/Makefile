@@ -1,59 +1,111 @@
 # Makefile for Sphinx documentation
 #
 
+#  script to open an html file a browser
+define BROWSER_PYSCRIPT
+import os, webbrowser, sys
+
+from urllib.request import pathname2url
+
+webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
+endef
+export BROWSER_PYSCRIPT
+
+BROWSER := python -c "$$BROWSER_PYSCRIPT"
+
 # You can set these variables from the command line.
-SPHINXOPTS    =
+SPHINXOPTS    = -v --color
 SPHINXBUILD   = sphinx-build
 PAPER         =
-BUILDDIR      = build
+BUILDDIR      = _build
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
-ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
+ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
-.PHONY: help clean html dirhtml pickle json htmlhelp qthelp latex changes linkcheck doctest
+.PHONY: help clean html dirhtml pickle json htmlhelp qthelp latex latexpdf changes linkcheck doctest
+
+all: html-noplot
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
-	@echo "  clean     to remove build and generated dir, pyc and so files"
-	@echo "  html      to generate reStructuredText API documentation and to make standalone HTML files"
-	@echo "  raw-html  to make standalone HTML files"
+	@echo "  html      to make standalone HTML files"
+	@echo "  html-noplot to make standalone HTML files, without plotting anything"
+	@echo "  ci-html-noplot to run html-noplot with warnings as errors"
+	@echo "  check     to do a sanity check of the documentation"
 	@echo "  dirhtml   to make HTML files named index.html in directories"
 	@echo "  pickle    to make pickle files"
 	@echo "  json      to make JSON files"
 	@echo "  htmlhelp  to make HTML files and a HTML help project"
 	@echo "  qthelp    to make HTML files and a qthelp project"
 	@echo "  latex     to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
+	@echo "  latexpdf  to make LaTeX files and run them through pdflatex"
 	@echo "  changes   to make an overview of all changed/added/deprecated items"
 	@echo "  linkcheck to check all external links for integrity"
 	@echo "  doctest   to run all doctests embedded in the documentation (if enabled)"
 
-clean-build:
-	-rm -rf $(BUILDDIR)/*
+clean:
+	-rm -rf $(BUILDDIR)
+	-rm -rf default
+	-rm -rf includes
+	-rm -rf mermaid
+	-rm -rf modules
+	-rm -rf sphinxext
+	-rm -rf templates
+	-rm -rf themes
+	-rm -rf auto_examples
+	find . ! -name highlights.csv -maxdepth 1 -type f -exec rm -rf '{}' \;
 
-clean-conf:
-	-rm %(MODULE_PATH)s/doc/source/conf.py
+.PHONY: ci
+ci:
+	python3 get_ci_workflows_description.py
 
-clean-index:
-	-rm %(MODULE_PATH)s/doc/source/index.rst
+.PHONY: index
+index:
+	python3 get_index.py
 
-clean-generated:
-	find . -type d -name "generated" | xargs rm -rf
+.PHONY: documentation
+documentation:
+	python3 get_documentation_description.py
 
-clean: clean-build clean-conf clean-index clean-generated
+.PHONY: versions
+versions:
+	python3 get_versions.py
 
-module-doc:
-	@echo "Generating sphinx doc..."
-	sphinxdoc -v 1 -p %(MODULE_PATH)s -n %(MODULE_NAME)s -o %(OUTDIR)s
- 
-html: clean module-doc
-	$(SPHINXBUILD) -T -E -W --keep-going -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+
+zip: html
+	mkdir -p _build/nidl ;
+	cp -r _build/html _build/nidl ;
+	zip -r _build/nidl.zip _build/nidl
+
+html: ci documentation versions index
+	rm -rf $(BUILDDIR)/html/_images
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
-raw-html: clean-build
-	$(SPHINXBUILD) -T -E -W --keep-going -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+html-strict: ci documentation versions index
+	# Build html documentation using a strict mode: Warnings are
+	# considered as errors.
+	rm -rf _build/doctrees
+	rm -rf $(BUILDDIR)/html/_images
+	BUILD_DEV_HTML=1 $(SPHINXBUILD) -W --keep-going -T -n -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	@echo
+	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
+
+html-modified-examples-only: ci documentation versions index
+	BUILD_DEV_HTML=1 $(SPHINXBUILD) -W --keep-going -D sphinx_gallery_conf.filename_pattern=$(PATTERN) -D sphinx_gallery_conf.run_stale_examples=True -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	@echo
+	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
+
+html-noplot: ci documentation versions index
+	BUILD_DEV_HTML=1 $(SPHINXBUILD) -D plot_gallery=0 -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	@echo
+	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
+
+html-noplot-noreport: ci documentation versions index
+	BUILD_DEV_HTML=1 $(SPHINXBUILD) -W --keep-going -D plot_gallery=0 -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
@@ -83,24 +135,17 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/NSAP.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/nilearn.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/NSAP.qhc"
-
-latex:
-	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex
-	@echo
-	@echo "Build finished; the LaTeX files are in $(BUILDDIR)/latex."
-	@echo "Run \`make all-pdf' or \`make all-ps' in that directory to" \
-	      "run these through (pdf)latex."
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/nilearn.qhc"
 
 changes:
 	$(SPHINXBUILD) -b changes $(ALLSPHINXOPTS) $(BUILDDIR)/changes
 	@echo
 	@echo "The overview file is in $(BUILDDIR)/changes."
 
-linkcheck:
-	$(SPHINXBUILD) -b linkcheck $(ALLSPHINXOPTS) $(BUILDDIR)/linkcheck
+linkcheck: sym_links sym_links_datasets glm_reports
+	$(SPHINXBUILD) -D plot_gallery=0 -b linkcheck $(ALLSPHINXOPTS) $(BUILDDIR)/linkcheck
 	@echo
 	@echo "Link check complete; look for any errors in the above output " \
 	      "or in $(BUILDDIR)/linkcheck/output.txt."
@@ -109,3 +154,9 @@ doctest:
 	$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(BUILDDIR)/doctest/output.txt."
+
+latexpdf:
+	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex
+	@echo "Running LaTeX files through pdflatex..."
+	make -C $(BUILDDIR)/latex all-pdf
+	@echo "pdflatex finished; the PDF files are in $(BUILDDIR)/latex."
