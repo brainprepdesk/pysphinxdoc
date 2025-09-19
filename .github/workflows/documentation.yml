@@ -98,7 +98,7 @@ jobs:
     - name: Deploy
       env:
         DEPLOY_TYPE: ${{ steps.deploy-type.outputs.DEPLOY_TYPE }}
-      if: env.DEPLOY_TYPE != "pr"
+      if: env.DEPLOY_TYPE != 'pr'
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
