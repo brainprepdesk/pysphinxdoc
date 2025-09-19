@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! /usr/bin/python3
 ##########################################################################
 # pysphinxdoc - Copyright (C) AGrigis, 2026
 # Distributed under the terms of the CeCILL-B license, as published by
@@ -8,9 +8,7 @@
 ##########################################################################
 
 
-import fire
-from pysphinxdoc.interface import generate_documentation
+from pysphinxdoc.interface import generate_documentation_main
 
 
-if __name__ == "__main__":
-    fire.Fire(generate_documentation)
+generate_documentation_main()

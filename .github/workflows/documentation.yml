@@ -59,13 +59,14 @@ jobs:
         pip install setuptools
         pip install --progress-bar off .
     - name: Install apt packages
-      uses: tecolicom/actions-use-apt-tools@v1
+      uses: awalsh128/cache-apt-pkgs-action@latest
       with:
-        tools: dvipng texlive-latex-base texlive-latex-extra build-essential
-        method: timestamp
+        packages: dvipng texlive-latex-base texlive-latex-extra build-essential
+        version: 1.0
     - name: Install documentation resources
       run: |
         DIR=$(pwd)
+        which python
         sphinxdoc -v 2 -p $DIR -n pysphinxdoc -o $DIR/doc
     - name: Compute documentation
       run: |

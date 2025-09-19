@@ -72,6 +72,7 @@ def generate_documentation(
 
     if verbose > 0:
         print("[info] Done.")
+    sys.exit(0)
 
 
 def generate_documentation_main():
