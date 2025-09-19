@@ -28,6 +28,10 @@ jobs:
       contents: write
 
     steps:
+    - name: Extract branch name
+      id: extract-branch
+      shell: bash
+      run: echo "BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
     - name: Checkout repository
       uses: actions/checkout@v5
       with:
@@ -37,40 +41,53 @@ jobs:
       with:
         python-version: ${{ env.MIN_PYTHON_VERSION }}
         cache: "pip"
-    - name: Install apt packages
-      run: |
-        sudo -E apt-get -yq update
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install \
-            dvipng texlive-latex-base texlive-latex-extra
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install setuptools
         pip install --progress-bar off .
+    - name: Install apt packages
+      uses: awalsh128/cache-apt-pkgs-action@latest
+      with:
+        packages: dvipng texlive-latex-base texlive-latex-extra build-essential
+        version: 1.0
+    - name: Install documentation resources
+      run: |
+        DIR=$(pwd)
+        which python
+        sphinxdoc -v 2 -p $DIR -n pysphinxdoc -o $DIR/doc
+    - name: Compute documentation
+      run: |
+        DIR=$(pwd)
+        cd $DIR/doc
+        echo "Documentation folder: $DIR/doc"
+        make html-strict
+        cd $DIR
+    - name: Upload documentation as an artifact
+      uses: actions/upload-artifact@v4
+      env:
+        BRANCH: ${{ steps.extract-branch.outputs.BRANCH }}
+      with: 
+        name: doc-${{ env.BRANCH }}
+        retention-days: 1
+        path: |
+            doc/_build/html
     - name: Extract module version
+      id: extract-version
       shell: python
       run: |
         import os
         import pysphinxdoc
         with open(os.environ["GITHUB_OUTPUT"], "a") as of:
-          of.write(f"version={pysphinxdoc.__version__}")
-      id: extract_version
-    - name: Compute documentation
-      run: |
-        DIR=$(pwd)
-        sphinxdoc -v 2 -p $DIR -n pysphinxdoc -o $DIR/doc
-        cd $DIR/doc
-        make html-strict
-        cd $DIR
-    - name: Upload documentation as an artifact
-      uses: actions/upload-artifact@v4
-      with: 
-        name: html-documentation
-        retention-days: 1
-        path: |
-            doc/build/html
+          of.write(f"VERSION={pysphinxdoc.__version__}")
+
     - name: Deploy
+      env:
+        BRANCH: ${{ steps.extract-branch.outputs.BRANCH }}
+        ENV: ${{ steps.extract-version.outputs.VERSION }}
+      if: env.BRANCH == 'master' || env.BRANCH == 'main'
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: doc/build/html
-        destination_dir: ${{ steps.extract_version.outputs.version }}
+        publish_dir: doc/_build/html
+        destination_dir: ./${{ env.VERSION }}
