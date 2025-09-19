@@ -91,7 +91,7 @@ jobs:
       env:
         DEPLOY_TYPE: ${{ steps.deploy-type.outputs.DEPLOY_TYPE }}
       with: 
-        name: doc-${{ DEPLOY_TYPE }}
+        name: doc-${{ env.DEPLOY_TYPE }}
         retention-days: 1
         path: |
             doc/_build/html
