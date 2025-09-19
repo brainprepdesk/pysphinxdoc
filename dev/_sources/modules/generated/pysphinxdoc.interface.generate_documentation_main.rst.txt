@@ -1,0 +1,21 @@
+﻿:orphan:
+
+.. note::
+
+   This page is a reference documentation. It only explains the
+   function signature, and not how to use it. Please refer to the
+   :ref:`user guide <user_guide>` for the big picture.
+
+
+pysphinxdoc.interface.generate_documentation_main
+=================================================
+
+.. currentmodule:: pysphinxdoc.interface
+
+.. autofunction:: generate_documentation_main
+
+.. include:: pysphinxdoc.interface.generate_documentation_main.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

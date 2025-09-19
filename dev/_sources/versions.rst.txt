@@ -1,0 +1,16 @@
+.. _versions:
+
+========
+Versions
+========
+
+Web-based documentation is available for versions listed below:
+
+
+* `dev documentation <https://AGrigis.github.io/pysphinxdoc/dev>`_
+
+* `stable documentation <https://AGrigis.github.io/pysphinxdoc/stable>`_
+
+* `1.0.0 documentation <https://AGrigis.github.io/pysphinxdoc/1.0.0>`_
+
+* `1.1.0 documentation <https://AGrigis.github.io/pysphinxdoc/1.1.0>`_

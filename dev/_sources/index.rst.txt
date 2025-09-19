@@ -1,0 +1,119 @@
+pysphinxdoc
+===========
+
+
+
+In modern software development, documentation is a necessity. Yet,
+maintaining up-to-date documentation manually is often neglected due to
+time constraints, human error, or shifting priorities. This is where
+automatic documentation generation becomes a game-changer.
+
+
+Why it matters
+--------------
+
+**Consistency and Accuracy**: Automatically generated documentation eliminates
+discrepancies between outdated docs and evolving code, ensuring developers
+always have reliable references.
+
+**Time Efficiency**: Developers spend less time writing documentation and more
+time solving real problems.
+
+**Improved Onboarding**: New team members can quickly understand APIs,
+functions, and modules without digging through code. Auto-generated docs
+provide a clear, structured overview that accelerates learning.
+
+**Scalability and Maintainability**: As projects grow, manual documentation
+becomes unsustainable. Automation scales effortlessly, adapting to changes
+without requiring extra effort.
+
+
+
+.. grid::
+
+    .. grid-item-card:: :fas:`rocket` Quickstart
+        :link: quickstart
+        :link-type: ref
+        :columns: 12 12 4 4
+        :class-card: sd-shadow-md
+        :class-title: sd-text-primary
+        :margin: 2 2 0 0
+
+        Get started with pysphinxdoc
+
+    .. grid-item-card:: :fas:`th` Examples
+        :link: auto_examples/index.html
+        :link-type: url
+        :columns: 12 12 4 4
+        :class-card: sd-shadow-md
+        :class-title: sd-text-primary
+        :margin: 2 2 0 0
+
+        Discover functionalities by reading examples
+
+    .. grid-item-card:: :fas:`book` User guide
+        :link: user_guide
+        :link-type: ref
+        :columns: 12 12 4 4
+        :class-card: sd-shadow-md
+        :class-title: sd-text-primary
+        :margin: 2 2 0 0
+
+        Learn about pysphinxdoc
+
+
+Featured works
+--------------
+
+.. raw:: html
+
+    <br/>
+    <div class="sphx-glr-thumbnails">
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="A simple example showing how to generate the pysphinxdoc documentation...">
+
+.. only:: html
+
+  .. image:: /auto_examples/images/thumb/sphx_glr_docgen_thumb.png
+    :alt: Basic pysphinxdoc example
+
+  :ref:`sphx_glr_auto_examples_docgen.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Basic pysphinxdoc example</div>
+    </div>
+
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+   :includehidden:
+   :titlesonly:
+
+   quickstart.md
+   auto_examples/index.rst
+   user_guide/index.rst
+   modules/index.rst
+   modules/search.rst
+
+.. toctree::
+   :hidden:
+   :caption: Development
+
+   contributing.rst
+   ci.rst
+   maintenance.rst
+   whats_new.rst
+   authors.rst
+   license.rst
+   versions.rst
