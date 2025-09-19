@@ -57,6 +57,7 @@ jobs:
       uses: tecolicom/actions-use-apt-tools@v1
       with:
         tools: dvipng texlive-latex-base texlive-latex-extra
+        method: timestamp
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
@@ -66,7 +67,7 @@ jobs:
       run: |
         DIR=$(pwd)
         sphinxdoc -v 2 -p $DIR -n pysphinxdoc -o $DIR/doc
-        cd $DIR/doc
+        cd ./doc
         make html-strict
         cd $DIR
     - name: Upload documentation as an artifact

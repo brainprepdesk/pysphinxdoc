@@ -70,6 +70,9 @@ def generate_documentation(
     docwriter.write_api_search()
     docwriter.write_api_doc()
 
+    if verbose > 0:
+        print(f"[info] Done.")
+
 
 def generate_documentation_main():
     import fire
