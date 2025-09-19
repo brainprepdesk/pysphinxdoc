@@ -81,12 +81,12 @@ jobs:
         name: html-documentation
         retention-days: 1
         path: |
-            doc/build/html
+            doc/_build/html
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: doc/build/html
+        publish_dir: doc/_build/html
         destination_dir: ./${{ steps.extract_branch.outputs.branch }}
 
   build:
@@ -137,4 +137,4 @@ jobs:
         name: html-documentation
         retention-days: 1
         path: |
-            doc/build/html
+            doc/_build/html
