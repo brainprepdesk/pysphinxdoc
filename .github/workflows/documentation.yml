@@ -63,11 +63,15 @@ jobs:
       with:
         tools: dvipng texlive-latex-base texlive-latex-extra build-essential
         method: timestamp
-    - name: Compute documentation
+    - name: Install documentation resources
       run: |
         DIR=$(pwd)
         sphinxdoc -v 2 -p $DIR -n pysphinxdoc -o $DIR/doc
-        cd ./doc
+    - name: Compute documentation
+      run: |
+        DIR=$(pwd)
+        cd $DIR/doc
+        echo "Documentation folder: $DIR/doc"
         make html-strict
         cd $DIR
     - name: Upload documentation as an artifact
