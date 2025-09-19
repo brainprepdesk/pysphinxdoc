@@ -9,6 +9,7 @@
 """ Provide a command line interface.
 """
 
+
 def generate_documentation(
         path_module,
         name_module,

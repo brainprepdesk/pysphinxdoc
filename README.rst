@@ -37,7 +37,8 @@ Important links
 ===============
 
 - Official source code repo: https://github.com/AGrigis/pysphinxdoc
-- HTML documentation (stable release): https://AGrigis.github.io/pysphinxdoc
+- HTML documentation (stable release): https://AGrigis.github.io/pysphinxdoc/master
+- HTML documentation (dev): https://AGrigis.github.io/pysphinxdoc/dev
 
 
 Install
