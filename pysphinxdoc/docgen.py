@@ -130,7 +130,7 @@ class DocWriter:
         for members in self.module_members.values():
             entries.extend(members["classes"] + members["functions"])
         entries = [
-            f"<li><a href='{name}.html'>{name}</a></li>"
+            f"<li><a href='generated/{name}.html'>{name}</a></li>"
             for name in sorted(entries)
         ]
         info = {

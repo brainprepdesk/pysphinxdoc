@@ -23,7 +23,7 @@ on:
   workflow_dispatch:
 
 env:
-    MIN_PYTHON_VERSION: "3.12"
+  MIN_PYTHON_VERSION: "3.12"
 
 jobs:
 

@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-    MIN_PYTHON_VERSION: "3.12"
+  MIN_PYTHON_VERSION: "3.12"
 
 jobs:
 
@@ -80,7 +80,6 @@ jobs:
         import pysphinxdoc
         with open(os.environ["GITHUB_OUTPUT"], "a") as of:
           of.write(f"VERSION={pysphinxdoc.__version__}")
-
     - name: Deploy
       env:
         BRANCH: ${{ steps.extract-branch.outputs.BRANCH }}
