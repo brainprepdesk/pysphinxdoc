@@ -327,6 +327,27 @@ module.</p>
 </div>
 <p>The documentation is generated from the reStructuredText docstrings of each
 module, function or class.</p>
+<p>Note that with <code class="docutils literal notranslate"><span class="pre">__all__</span></code> defined, the module will only document the names
+listed in <code class="docutils literal notranslate"><span class="pre">__all__</span></code>. Without <code class="docutils literal notranslate"><span class="pre">__all__</span></code> defined, the module will document
+all public names (those not starting with _).</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>This means <code class="docutils literal notranslate"><span class="pre">__all__</span></code> acts as a gatekeeper for what gets included in
+your generated docs — just like it does for <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">*</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In Python, <code class="docutils literal notranslate"><span class="pre">__all__</span></code> is a special variable used in modules to define
+what symbols (functions, classes, variables, etc.) should be exported
+when <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">*</span></code> is used:</p>
+<ul class="simple">
+<li><p>it controls the public API of a module.</p></li>
+<li><p>it helps hide internal details and expose only what’s meant to be used
+externally.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">__all__</span></code> variable is defined as a list of strings at the top level
+of a module.</p>
+</div>
 </section>
 <section id="complile-documentation">
 <h2><span class="section-number">3.2. </span>Complile documentation<a class="headerlink" href="#complile-documentation" title="Link to this heading">¶</a></h2>

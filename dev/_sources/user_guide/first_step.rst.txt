@@ -18,6 +18,28 @@ module.
 The documentation is generated from the reStructuredText docstrings of each
 module, function or class.
 
+Note that with ``__all__`` defined, the module will only document the names
+listed in ``__all__``. Without ``__all__`` defined, the module will document
+all public names (those not starting with _).
+
+.. hint::
+
+    This means ``__all__`` acts as a gatekeeper for what gets included in
+    your generated docs — just like it does for ``from module import *``.
+
+.. note::
+
+    In Python, ``__all__`` is a special variable used in modules to define
+    what symbols (functions, classes, variables, etc.) should be exported
+    when ``from module import *`` is used:
+
+    - it controls the public API of a module.
+    - it helps hide internal details and expose only what's meant to be used
+      externally.
+
+    The ``__all__`` variable is defined as a list of strings at the top level
+    of a module.
+
 
 Complile documentation
 ----------------------

@@ -16,8 +16,8 @@ the :ref:`user guide <user_guide>` for more information and usage examples.
       <input type='text' id='my-search' onkeyup='mySearch()' placeholder='Search for functions & classes...' title='Search'>
     </div>
     <ul id='my-search-entries'>
-      <li><a href='pysphinxdoc.docgen.DocWriter.html'>pysphinxdoc.docgen.DocWriter</a></li>
-      <li><a href='pysphinxdoc.interface.generate_documentation.html'>pysphinxdoc.interface.generate_documentation</a></li>
-      <li><a href='pysphinxdoc.interface.generate_documentation_main.html'>pysphinxdoc.interface.generate_documentation_main</a></li>
-      <li><a href='pysphinxdoc.utils.getmembers.html'>pysphinxdoc.utils.getmembers</a></li>
+      <li><a href='generated/pysphinxdoc.docgen.DocWriter.html'>pysphinxdoc.docgen.DocWriter</a></li>
+      <li><a href='generated/pysphinxdoc.interface.generate_documentation.html'>pysphinxdoc.interface.generate_documentation</a></li>
+      <li><a href='generated/pysphinxdoc.interface.generate_documentation_main.html'>pysphinxdoc.interface.generate_documentation_main</a></li>
+      <li><a href='generated/pysphinxdoc.utils.getmembers.html'>pysphinxdoc.utils.getmembers</a></li>
     </ul>

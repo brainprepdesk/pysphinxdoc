@@ -22,7 +22,7 @@ Optional
 
 Optionally, you can add:
 
-- **doc/user_guide/index.rst**: a complete use guide.
+- **doc/user_guide/index.rst**: a complete user guide.
 - **highlights.csv**: a table containing one line per highlight. Each line is
   composed of a reference, thumb location, tooltip, and title.
 - **CONTRIBUTING.rst**: the contributing guidelines (default guidelines are

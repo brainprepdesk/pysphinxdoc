@@ -437,7 +437,7 @@
         <span class="k">for</span> <span class="n">members</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_members</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">entries</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">members</span><span class="p">[</span><span class="s2">&quot;classes&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">members</span><span class="p">[</span><span class="s2">&quot;functions&quot;</span><span class="p">])</span>
         <span class="n">entries</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="sa">f</span><span class="s2">&quot;&lt;li&gt;&lt;a href=&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.html&#39;&gt;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&lt;/a&gt;&lt;/li&gt;&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;li&gt;&lt;a href=&#39;generated/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.html&#39;&gt;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&lt;/a&gt;&lt;/li&gt;&quot;</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
         <span class="p">]</span>
         <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
