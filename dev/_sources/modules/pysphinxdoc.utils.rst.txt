@@ -18,7 +18,8 @@ Functions
    :toctree: generated/
    :template: function.rst
 
-    pysphinxdoc.utils.getmembers
+    _getmembers
+    getmembers
 
 
 

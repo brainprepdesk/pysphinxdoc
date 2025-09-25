@@ -16,7 +16,7 @@ Classes
    :toctree: generated/
    :template: class.rst
 
-    pysphinxdoc.docgen.DocWriter
+    DocWriter
 
 .. .. autoclasstree:: pysphinxdoc.docgen
        :strict:

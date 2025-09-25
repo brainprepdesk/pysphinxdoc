@@ -18,8 +18,8 @@ Functions
    :toctree: generated/
    :template: function.rst
 
-    pysphinxdoc.interface.generate_documentation
-    pysphinxdoc.interface.generate_documentation_main
+    generate_documentation
+    generate_documentation_main
 
 
 

@@ -14,3 +14,5 @@ Web-based documentation is available for versions listed below:
 * `1.0.0 documentation <https://AGrigis.github.io/pysphinxdoc/1.0.0>`_
 
 * `1.1.0 documentation <https://AGrigis.github.io/pysphinxdoc/1.1.0>`_
+
+* `1.1.3 documentation <https://AGrigis.github.io/pysphinxdoc/1.1.3>`_
