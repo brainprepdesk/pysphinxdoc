@@ -42,7 +42,7 @@ extensions = [
     "sphinxcontrib.bibtex",
     "sphinxcontrib.mermaid",
     "sphinxext.opengraph",
-    "sphinx.ext.viewcode"
+    "sphinx.ext.linkcode",
 ]
 
 autosummary_generate = True
@@ -114,6 +114,20 @@ else:
     raise AttributeError(
         f"Yet, works only with GitHub repository: {{repo_url}}."
     )
+
+# Specify a linkcode_resolve function that returns an URL based on the object.
+# See https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html
+template_file = Path("sphinxext") / "github_links.py"
+template_info = {{
+    "repo_url": repo_url,
+    "project": project,
+}}
+with open(template_file) as of:
+    buff = of.read()
+with open(template_file, "w") as of:
+    of.write(buff.format(**template_info))
+from github_links import make_linkcode_resolve
+linkcode_resolve = make_linkcode_resolve
 
 # The full current version, including alpha/beta/rc tags.
 current_version = __version__
