@@ -127,8 +127,11 @@ class DocWriter:
         search_file = os.path.join(self.apidir, "search.rst")
         shutil.copy(template_file, search_file)
         entries = []
-        for members in self.module_members.values():
-            entries.extend(members["classes"] + members["functions"])
+        for mod, members in self.module_members.items():
+            for otype in ("classes", "functions"):
+                entries.extend(
+                    [f"{mod}.{obj}" for obj in members[otype]]
+                )
         entries = [
             f"<li><a href='generated/{name}.html'>{name}</a></li>"
             for name in sorted(entries)
