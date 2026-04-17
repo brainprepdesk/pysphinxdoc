@@ -40,7 +40,7 @@ def getmembers(module):
             try:
                 submodule_name = f"{module.__name__}.{name}"
                 submodule = importlib.import_module(submodule_name)
-            except Exception as e:
+            except ImportError as e:
                 print(f"Could not import submodule '{submodule_name}': {e}")
             members.update(
                 _getmembers(
