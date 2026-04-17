@@ -1,0 +1,29 @@
+:mod:`pysphinxdoc.docgen`:  Provide a 'DocHelperWriter' class to generate a Sphinx complient
+============================================================================================
+
+.. automodule:: pysphinxdoc.docgen
+   :no-members:
+   :no-inherited-members:
+
+.. No relevant user manual section yet.
+
+Classes
+-------
+
+.. currentmodule:: pysphinxdoc.docgen
+
+.. autosummary::
+   :toctree: generated/
+   :template: class.rst
+
+    DocWriter
+
+.. .. autoclasstree:: pysphinxdoc.docgen
+       :strict:
+       :align: center
+
+
+
+
+
+

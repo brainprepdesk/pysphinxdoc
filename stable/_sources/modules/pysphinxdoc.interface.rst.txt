@@ -1,0 +1,26 @@
+:mod:`pysphinxdoc.interface`:  Provide a command line interface.
+================================================================
+
+.. automodule:: pysphinxdoc.interface
+   :no-members:
+   :no-inherited-members:
+
+.. No relevant user manual section yet.
+
+
+
+Functions
+---------
+
+.. currentmodule:: pysphinxdoc.interface
+
+.. autosummary::
+   :toctree: generated/
+   :template: function.rst
+
+    generate_documentation
+    generate_documentation_main
+
+
+
+
