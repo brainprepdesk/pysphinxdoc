@@ -6,9 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "pysphinxdoc"
 readme = "README.rst"
 requires-python = "==3.12.*"
-authors = [
-    {name = "Antoine Grigis", email = "antoine.grigis@cea.fr"},
-]
+authors = [{name = "pysphinxdoc developers"}]
 license = "CECILL-B"
 classifiers = [
     "Intended Audience :: Science/Research",
@@ -42,9 +40,9 @@ dynamic = ["version"]
 sphinxdoc = "pysphinxdoc.interface:generate_documentation_main"
 
 [project.urls]
-Development = "https://github.com/AGrigis/pysphinxdoc"
-Tracker = "https://github.com/AGrigis/pysphinxdoc/issues"
-Homepage = "https://agrigis.github.io/pysphinxdoc"
+Development = "https://github.com/brainprepdesk/pysphinxdoc"
+Tracker = "https://github.com/brainprepdesk/pysphinxdoc/issues"
+Homepage = "https://brainprepdesk.github.io/pysphinxdoc"
 
 [tool.setuptools]
 platforms = ["Linux", ]

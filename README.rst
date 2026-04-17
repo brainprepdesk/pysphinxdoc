@@ -1,7 +1,7 @@
 **Usage**
 
 .. image:: https://img.shields.io/badge/python-3.12-blue
-    :target: https://github.com/AGrigis/pysphinxdoc
+    :target: https://github.com/brainprepdesk/pysphinxdoc
     :alt: Python Version
 
 .. image:: https://img.shields.io/badge/License-CeCILL--B-blue.svg
@@ -10,12 +10,12 @@
 
 **Development**
 
-.. image:: https://github.com/AGrigis/pysphinxdoc/actions/workflows/pep8.yml/badge.svg
-    :target: https://github.com/AGrigis/pysphinxdoc/actions
+.. image:: https://github.com/brainprepdesk/pysphinxdoc/actions/workflows/pep8.yml/badge.svg
+    :target: https://github.com/brainprepdesk/pysphinxdoc/actions
     :alt: Github Actions Linter Status
 
-.. image:: https://github.com/AGrigis/pysphinxdoc/actions/workflows/documentation.yml/badge.svg
-    :target: http://AGrigis.github.io/pysphinxdoc
+.. image:: https://github.com/brainprepdesk/pysphinxdoc/actions/workflows/documentation.yml/badge.svg
+    :target: http://brainprepdesk.github.io/pysphinxdoc
     :alt: Github Actions Doc Build Status
 
 **Release**
@@ -36,9 +36,9 @@ for Python modules, based on their reStructuredText docstrings, using
 Important links
 ===============
 
-- Official source code repo: https://github.com/AGrigis/pysphinxdoc
-- HTML documentation (stable release): https://AGrigis.github.io/pysphinxdoc/stable
-- HTML documentation (dev): https://AGrigis.github.io/pysphinxdoc/dev
+- Official source code repo: https://github.com/brainprepdesk/pysphinxdoc
+- HTML documentation (stable release): https://brainprepdesk.github.io/pysphinxdoc/stable
+- HTML documentation (dev): https://brainprepdesk.github.io/pysphinxdoc/dev
 
 
 Install
@@ -96,4 +96,4 @@ Dependencies
 ============
 
 The required dependencies to use the software are listed
-in the file `pyproject.toml <https://github.com/AGrigis/pysphinxdoc/blob/main/pyproject.toml>`_.
+in the file `pyproject.toml <https://github.com/brainprepdesk/pysphinxdoc/blob/main/pyproject.toml>`_.
