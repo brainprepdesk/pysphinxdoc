@@ -1,112 +1,14 @@
-#! /usr/bin/env python3
+#! /usr/bin/python3
 ##########################################################################
-# pysphinxdoc - Copyright (C) AGrigis, 2016
+# pysphinxdoc - Copyright (C) AGrigis, 2026
 # Distributed under the terms of the CeCILL-B license, as published by
 # the CEA-CNRS-INRIA. Refer to the LICENSE file or to
 # http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html
 # for details.
 ##########################################################################
 
-# System import
-from __future__ import print_function
-import os
-from setuptools import find_packages
-import argparse
-import sys
-if sys.version_info >= (3, 3):
-    from unittest.mock import MagicMock
-else:
-    from mock import MagicMock
 
-# Pysphinxdoc import
-from pysphinxdoc.docgen import DocHelperWriter
-from pysphinxdoc.info import long_description
+from pysphinxdoc.interface import generate_documentation_main
 
 
-# Get the module name passed in argument
-def is_directory(dirarg):
-    """ Type for argparse - checks that directory exists.
-    """
-    if not os.path.isdir(dirarg):
-        raise argparse.ArgumentError(
-            "The directory '{0}' does not exist!".format(dirarg))
-    return dirarg
-parser = argparse.ArgumentParser(description=long_description)
-parser.add_argument(
-    "-v", "--verbose", dest="verbose", type=int, default=0, choices=[0, 1, 2],
-    help="increase the verbosity level: 0 silent, [1, 2] verbose.")
-parser.add_argument(
-    "-p", "--path_module", dest="path_module", required=True, metavar="PATH",
-    help="the path to the module to be documented.", type=is_directory)
-parser.add_argument(
-    "-n", "--name_module", dest="name_module", required=True,
-    help="the name of the module to be documented: use the '*' prefix to "
-         "avoid this filtering.")
-parser.add_argument(
-    "-o", "--outdir", dest="outdir", required=True, metavar="PATH",
-    help="the path to write documentation.", type=is_directory)
-parser.add_argument(
-    "-e", "--examples", dest="examples", action="store_true",
-    help="generate the examples from the package scripts.")
-parser.add_argument(
-    "-m", "--mock", nargs="+",
-    help="mock some modules if dependencies cannot be installed when building "
-         "the project.")
-parser.add_argument(
-    "-k", "--mock-params", nargs="+",
-    help="the parameters returned by mocked modules.")
-parser.add_argument(
-    "-r", "--mock-returns", nargs="+",
-    help="the parameters values returned by mocked modules.")
-parser.add_argument(
-    "-i", "--pypi-index",
-    help="the pypi index of the module: useful if different from the module "
-         "name.")
-args = parser.parse_args()
-
-
-# Mock uninstalled modules
-mock_kwargs = {}
-if args.mock_params is not None:
-    for key, val_repr in zip(args.mock_params, args.mock_returns):
-        mock_kwargs[key] = eval(val_repr)
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
-        return MagicMock(**mock_kwargs)
-if args.mock is not None:
-    sys.modules.update((mod_name, Mock()) for mod_name in args.mock)
-
-
-# Check that a '$name_module/doc/source' folder has been created in the project
-srcdir = os.path.join(args.path_module, "doc", "source")
-if not os.path.isdir(srcdir):
-    raise IOError("'{0}' is not a valid directory.".format(srcdir))
-
-# Get all the modules involved
-module_names = sorted(find_packages(args.path_module))
-if args.verbose > 0:
-    print("[info] Documenting package {0} ...".format(args.name_module))
-    print("[info] Modules to be documented: ")
-    print("[info] {0}".format(module_names))
-    if not args.name_module.startswith("*"):
-        module_names = [name for name in module_names
-                        if name.startswith(args.name_module)]
-    else:
-        args.name_module = args.name_module[1:]
-    print("[info] Surviving modules: ")
-    print("[info] {0}".format(module_names))
-    
-
-# Generate a sphinx layout, API documentation, and Sphinx configuration.
-docwriter = DocHelperWriter(args.path_module, args.outdir, module_names,
-                            args.name_module, args.examples,
-                            verbose=args.verbose)
-docwriter.write_sphinx_config()
-docwriter.write_layout()
-docwriter.write_index()
-docwriter.write_installation(pypi_index=args.pypi_index)
-docwriter.write_gallery()
-docwriter.write_api_docs()
-docwriter.write_documentation_index()
-docwriter.write_search()
+generate_documentation_main()

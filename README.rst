@@ -1,76 +1,99 @@
 **Usage**
 
-|PythonVersion|_ |License|_
+.. image:: https://img.shields.io/badge/python-3.12-blue
+    :target: https://github.com/brainprepdesk/pysphinxdoc
+    :alt: Python Version
+
+.. image:: https://img.shields.io/badge/License-CeCILL--B-blue.svg
+    :target: http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html
+    :alt: License
 
 **Development**
 
-|Linter|_ |Doc|_
+.. image:: https://github.com/brainprepdesk/pysphinxdoc/actions/workflows/pep8.yml/badge.svg
+    :target: https://github.com/brainprepdesk/pysphinxdoc/actions
+    :alt: Github Actions Linter Status
+
+.. image:: https://github.com/brainprepdesk/pysphinxdoc/actions/workflows/documentation.yml/badge.svg
+    :target: http://brainprepdesk.github.io/pysphinxdoc
+    :alt: Github Actions Doc Build Status
 
 **Release**
 
-|PyPi|_
+.. image:: https://badge.fury.io/py/pysphinxdoc.svg
+    :target: https://badge.fury.io/py/pysphinxdoc
+    :alt: Pypi Package
 
 
-.. |PythonVersion| image:: https://img.shields.io/badge/python-3.12-blue
-.. _PythonVersion: https://github.com/AGrigis/pysphinxdoc
-
-.. |Linter| image:: https://github.com/AGrigis/pysphinxdoc/actions/workflows/pep8.yml/badge.svg
-.. _Linter: https://github.com/AGrigis/pysphinxdoc/actions
-
-.. |PyPi| image:: https://badge.fury.io/py/pysphinxdoc.svg
-.. _PyPi: https://badge.fury.io/py/pysphinxdoc
-
-.. |Doc| image:: https://github.com/AGrigis/pysphinxdoc/actions/workflows/documentation.yml/badge.svg
-.. _Doc: http://AGrigis.github.io/pysphinxdoc
-
-.. |License| image:: https://img.shields.io/badge/License-CeCILL--B-blue.svg
-.. _License: http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html
-
-
-===========
 pysphinxdoc
 ===========
-
-API Documentation Generation Tool.
 
 Pysphinxdoc is a tool for generating automatically API documentation
 for Python modules, based on their reStructuredText docstrings, using
 `Sphinx <http://www.sphinx-doc.org/>`_.
-Visit this `module documentation <https://AGrigis.github.io/pysphinxdoc>`_
-for a live example.
 
-How to
-------
 
-Here is an exemple to generate the 'pysphinxdoc' module documentation:
-```
-sphinxdoc -v 2 -p $HOME/git/pysphinxdoc -n pysphinxdoc -o $HOME/git/pysphinxdoc/doc
-cd $HOME/git/pysphinxdoc/doc
-make raw-html
-```
+Important links
+===============
 
-Expect a '$name_module/doc/source/_static' folder containing a logo named
-'$name_module.png' and an 'carousel' subfolder containing a list of images
-to be displayed in the index banner of the site.
+- Official source code repo: https://github.com/brainprepdesk/pysphinxdoc
+- HTML documentation (stable release): https://brainprepdesk.github.io/pysphinxdoc/stable
+- HTML documentation (dev): https://brainprepdesk.github.io/pysphinxdoc/dev
 
-The documentation is generated from the reStructuredText docstrings of each
-module, function or class.
 
-In order to find module information, an 'info.py' module is expected at the
-root of the module with mandatory keys:
+Install
+=======
 
-    * NAME: the name of the module.
-    * DESCRIPTION: the module short description that will be displayed in the
-      banner.
-    * LONG_DESCRIPTION: the index page content.
-    * URL: the module URL.
-    * AUTHOR: the author of the module.
-    * AUTHOR_EMAIL: the author e-mail.
-    * __version__: the module version.
+Latest release
+--------------
 
-And optional keys:
+**1. Setup a virtual environment**
 
-    * EXTRANAME: a name that will be displayed in the last element of the
-      navbar (default 'PYSPHINXDOC').
-    * EXTRAURL: the associated URL (default the pySphinxDoc URL).
+We recommend that you install ``pysphinxdoc`` in a virtual Python environment,
+either managed with the standard library ``venv`` or with ``conda``.
+Either way, create and activate a new python environment.
 
+With ``venv``:
+
+.. code-block:: bash
+
+    python3 -m venv /<path_to_new_env>
+    source /<path_to_new_env>/bin/activate
+
+Windows users should change the last line to ``\<path_to_new_env>\Scripts\activate.bat``
+in order to activate their virtual environment.
+
+With ``conda``:
+
+.. code-block:: bash
+
+    conda create -n pysphinxdoc python=3.12
+    conda activate pysphinxdoc
+
+**2. Install pysphinxdoc with pip**
+
+Execute the following command in the command prompt / terminal
+in the proper python environment:
+
+.. code-block:: bash
+
+    python3 -m pip install -U pysphinxdoc
+
+
+Check installation
+------------------
+
+Try importing pysphinxdoc in a python / iPython session:
+
+.. code-block:: python
+
+    import pysphinxdoc
+
+If no error is raised, you have installed pysphinxdoc correctly.
+
+
+Dependencies
+============
+
+The required dependencies to use the software are listed
+in the file `pyproject.toml <https://github.com/brainprepdesk/pysphinxdoc/blob/main/pyproject.toml>`_.

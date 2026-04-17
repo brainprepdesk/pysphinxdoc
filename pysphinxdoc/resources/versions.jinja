@@ -1,0 +1,11 @@
+.. _versions:
+
+========
+Versions
+========
+
+Web-based documentation is available for versions listed below:
+
+{% for version in context %}
+* `{{version.tag}} documentation <{{version.url}}>`_
+{% endfor %}
